@@ -1,0 +1,11 @@
+oauth_token: abcdefg123456
+folder: "test-folder"
+
+# set dir name and upload dir
+dir:
+   - from: img/
+     to: image
+   - from: movie/hoge
+     to: movie
+   - from: movie/fuga
+     to: movie
