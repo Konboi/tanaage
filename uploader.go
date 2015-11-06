@@ -311,7 +311,7 @@ func (uploader *Uploader) updateFile(media *os.File, file UploadFile) (result *d
 }
 
 func writeJson() error {
-	j, err := json.Marshal(uploadedFiles)
+	j, err := json.MarshalIndent(uploadedFiles, "", "  ")
 	if err != nil {
 		return err
 	}
