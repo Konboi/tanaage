@@ -110,6 +110,8 @@ func (uploader *Uploader) Run() error {
 						return err
 					}
 
+					defer media.Close()
+
 					if uploadedFiles[media.Name()].Name == "" {
 						uploadTo := strings.Replace(media.Name(), upload.From, upload.To, 1)
 						result, err := uploader.uploadFile(media, uploadTo)
@@ -150,6 +152,8 @@ func (uploader *Uploader) Run() error {
 			}
 		} else {
 			media, _ := os.Open(upload.From)
+			defer media.Close()
+
 			var result *drive.File
 			if uploadedFiles[media.Name()].Name == "" {
 				uploadTo := strings.Replace(media.Name(), upload.From, upload.To, 1)
