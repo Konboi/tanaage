@@ -114,6 +114,7 @@ func (uploader *Uploader) Run() error {
 						uploadTo := strings.Replace(media.Name(), upload.From, upload.To, 1)
 						result, err := uploader.uploadFile(media, uploadTo)
 						if err != nil {
+							writeJson()
 							return err
 						}
 
@@ -127,6 +128,7 @@ func (uploader *Uploader) Run() error {
 					} else if uploadedFiles[media.Name()].Name != "" && uploadedFiles[media.Name()].LastUpdateAt != info.ModTime() {
 						result, err := uploader.updateFile(media, uploadedFiles[media.Name()])
 						if err != nil {
+							writeJson()
 							return err
 						}
 
@@ -154,6 +156,7 @@ func (uploader *Uploader) Run() error {
 				result, err = uploader.uploadFile(media, uploadTo)
 
 				if err != nil {
+					writeJson()
 					return err
 				}
 
@@ -161,6 +164,7 @@ func (uploader *Uploader) Run() error {
 				result, err = uploader.updateFile(media, uploadedFiles[media.Name()])
 
 				if err != nil {
+					writeJson()
 					return err
 				}
 			}
@@ -178,12 +182,10 @@ func (uploader *Uploader) Run() error {
 		}
 	}
 
-	j, err := json.Marshal(uploadedFiles)
+	err := writeJson()
 	if err != nil {
 		return err
 	}
-
-	ioutil.WriteFile(HISTORY_JSON, j, os.ModePerm)
 
 	return nil
 }
@@ -302,4 +304,15 @@ func (uploader *Uploader) updateFile(media *os.File, file UploadFile) (result *d
 
 	return result, nil
 
+}
+
+func writeJson() error {
+	j, err := json.Marshal(uploadedFiles)
+	if err != nil {
+		return err
+	}
+
+	ioutil.WriteFile(HISTORY_JSON, j, os.ModePerm)
+
+	return nil
 }
